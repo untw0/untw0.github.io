@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" type="image/gif" href="/assets/favicon.gif">
+    <link rel="stylesheet" type="text/css" href="./css/paper.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JavaScript Obfuscation and Deobfuscation</title>
+  </head>
+  <body>
+    </header>
+    <main>
+      <div class="post">
+<div class="header">
+  <h1>JavaScript Obfuscation and Deobfuscation</h1>
+<p>16 maio de 2024 | Author: Maiquel Paiva (<a href="https://twitter.com/untw0">@untw0</a>)</p><br></div>
+
+<h1 id="introdução">1. Introdução</h1>
+ㅤ
+<p>Em ambientes digitais, muitos atores mal-intencionados recorrem à prática de ofuscar seus códigos, tornando-os menos detectáveis por sistemas de segurança e menos compreensíveis para outros desenvolvedores. A capacidade de desofuscar tais códigos é uma técnica valiosa em diversos contextos reais, como na avaliação de aplicativos web, permitindo identificar tentativas de ocultação de dados sensíveis por parte dos desenvolvedores. Além disso, os defensores podem usar essa habilidade para analisar e desofuscar códigos responsáveis por ataques, como em casos de phishing.</p>
+ㅤ
+<p>Atores maliciosos têm várias razões para ofuscar seus códigos. Entre elas, destacam-se a intenção de evitar detecção por sistemas de segurança, dificultar a análise por analistas de segurança, proteger propriedade intelectual e facilitar a propagação de ataques, como phishing. De forma geral, a ofuscação de código é uma prática comum entre atores mal-intencionados, utilizada para aumentar a eficácia e a furtividade de suas atividades maliciosas.</p>
+ㅤ
+<h1 id="introdução">Obfuscação</h1>
+ㅤ
+<p>A obfuscação é uma técnica utilizada para tornar um script mais difícil de ser lido por humanos, enquanto mantém seu funcionamento inalterado do ponto de vista técnico, embora possa impactar o desempenho. Geralmente, essa técnica é aplicada automaticamente por ferramentas de obfuscação, que recebem o código original e o reescrevem de uma maneira que torna sua leitura mais complexa.</p>
+ㅤ
+<p>Um exemplo típico de obfuscação de código envolve a transformação de um código JavaScript simples em uma versão altamente ofuscada. Por exemplo, obfuscadores de código frequentemente transformam o código em um dicionário de todas as palavras e símbolos usados dentro do código e depois tentam reconstruir o código original durante a execução, referindo-se a cada palavra e símbolo do dicionário. O seguinte é um exemplo de um código JavaScript simples sendo obfuscado:</p>
+<p><h2>Código não ofuscado:</h2></p>
+<p><img src="./icons/simples.png"></p>
+<p><h2>Código ofuscado:</h2></p>
+<p><img src="./icons/complicado.png"></p>
+ㅤ
+<p>A obfuscação é geralmente feita através de ferramentas automatizadas disponíveis para várias linguagens de programação. Embora existam muitas ferramentas online que realizam essa tarefa, atores maliciosos e desenvolvedores profissionais frequentemente criam suas próprias ferramentas para aumentar a dificuldade de desofuscação.</p>
+ㅤ
+<p>Uma maneira comum de reduzir a legibilidade do código JavaScript, mantendo-o funcional, é a minificação. A minificação compacta o código em uma única linha, o que é particularmente útil para códigos mais extensos. No entanto, a minificação é apenas um primeiro passo em comparação com técnicas de obfuscação mais avançadas.</p>
+ㅤ
+<p>O exemplo acima utiliza uma técnica de obfuscação conhecida como "empacotamento", reconhecível pelos seis argumentos de função usados na função inicial function(p,a,c,k,e,d). Ferramentas de empacotamento geralmente convertem todas as palavras e símbolos do código em uma lista ou dicionário e depois se referem a eles usando a função (p,a,c,k,e,d) para reconstruir o código original durante a execução. O padrão (p,a,c,k,e,d) pode variar entre diferentes empacotadores, mas geralmente segue uma ordem específica para organizar as palavras e símbolos do código original.</p>
+
+<h1 id="introdução">Recapitulando e tirando as dúvidas</h1>
+
+<p>Por que a ofuscação é frequentemente utilizada com JavaScript?</p>
+<p>Os códigos em linguagens interpretadas como Python, PHP e JavaScript são publicados e executados diretamente, sem precisar serem compilados. Enquanto Python e PHP são geralmente usados no servidor, invisíveis para os usuários, o JavaScript é comumente usado nos navegadores dos usuários, onde o código é visível e executado diretamente. Por isso, muitas vezes é necessário ofuscar o código JavaScript para protegê-lo.</p>
+ㅤ
+<p>A Obfuscação pode ser Utilizada para Atividades Maliciosas?</p>
+<p>Sim, a obfuscação pode ser utilizada para atividades maliciosas. Atores mal-intencionados frequentemente empregam essa técnica para ocultar o propósito e a funcionalidade do seu código, dificultando a detecção por sistemas de segurança e a análise por parte de analistas de segurança.</p>
+
+<h1 id="Introdução">Exemplo de Obfuscação para usos Maliciosos</h1>
+
+<p><h2>Código Phishing não ofuscado:</h2></p>
+<p><img src="./icons/phising.png"></p>
+
+<p><h2>Código do Phishing ofuscado:</h2></p>
+<p><img src="./icons/phising-obfu.png"></p>
+ㅤ
+<p>O código do Phishing em JS não ofuscado captura os dados de login inseridos pelo usuário e os envia para um servidor controlado por um atacante. Quando ofuscado, o código se torna significativamente mais difícil de entender, dificultando a detecção do comportamento malicioso.</p>
+
+<h1 id="Introdução">Roubo de Informações Pessoais</h1>
+
+<p><h2>Código não ofuscado:</h2></p>
+<p><img src="./icons/roubo.png"></p>
+<p><h2>Código ofuscado:</h2></p>
+<p><img src="./icons/roubo-ofs.png"></p>
+
+<p>A obfuscação pode ser usada para esconder scripts que coletam informações pessoais, como números de cartão de crédito, endereços e outras informações sensíveis, e as enviam para um servidor controlado por um atacante.</p>
+
+<h1 id="introdução">Um Exemplo Real de um Malware Ofuscado</h1>
+
+<p><h2>Selfbot do Discord</h2></p>
+<p>Métodos de obfuscação são frequentemente utilizados por pessoas mal-intencionadas no Discord para criar "selfbots". Selfbots são scripts que permitem a um usuário automatizar ações na plataforma Discord, muitas vezes em violação dos Termos de Serviço do Discord. Vamos ver como isso funciona:</p>
+<p><img src="./icons/selfbot.png"></p>
+
+<p><h2>Funcionamento de um Selfbot Malicioso</h2></p>
+<p>Estes métodos de obfuscação muitas vezes são usados por pessoas mal-intencionadas no Discord. Eles criam um "selfbot" que, ao ser executado, compromete o computador do usuário, muitas vezes sem que ele perceba. Vamos examinar como isso funciona, começando pela estrutura do selfbot.</p>
+
+<p><h2>Estrutura da Pasta do Selfbot</h2></p>
+<p>A estrutura da pasta do selfbot geralmente é bem organizada, o que faz com que pareça um script legítimo. No entanto, pode conter malware, como um keylogger, que monitora tudo o que é digitado no computador da vítima. Uma vez executado, o único jeito de se livrar dele é formatando o computador.</p>
+ㅤ
+<p>Este arquivo parece inocente, configurando algumas variáveis básicas necessárias para o funcionamento do selfbot, incluindo o token da conta do usuário.</p>
+<p><img src="./icons/config.js.png"></p>
+
+<p><h2>Arquivo index.js e Bibliotecas Externas (Libs)</h2></p>
+<p>O perigo real está no arquivo index.js ou, em alguns casos, nas bibliotecas instaladas dentro da pasta do selfbot (geralmente organizadas em uma pasta chamada lib). Muitas pessoas executam este arquivo sem saber que ele contém código malicioso. Aqui, um keylogger é instalado no computador, comprometendo todas as informações digitadas, incluindo senhas. Trocar a senha não adianta, pois o hacker continuará recebendo todas as novas senhas. A única solução é formatar o computador.</p>
+ㅤ
+<p>Além disso, selfbots frequentemente usam bibliotecas externas. Mesmo que o index.js não mostre nada suspeito após desobfuscação, é provável que bibliotecas incluídas contenham o código malicioso, como keyloggers escondidos.</p>
+<p><img src="./icons/selfbot-index.png"></p>
+
+
+
+
+
+
+
+
+
+
+
+    </main>
+    <footer>
+        <a href="blog.html">/blog.html</a> | <a href="/about.html">/about.html</a> | <a href="/contact">contact</a>
+    </footer>
+  </body>
+</html>
