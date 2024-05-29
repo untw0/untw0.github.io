@@ -1,7 +1,7 @@
 :root {
     --base-color: #0c0c0f;
     --bg-color: #e2e2e2;
-    --link-color: #ff0000;
+    --link-color: #39ff14;
     --color-blue: #3e6ff7;
     --color-green: #2ded4d;
     --color-orange: #ed7f25;
@@ -78,8 +78,8 @@ body {
     line-height: 1.5;
     margin: 0;
     padding: 0;
-    background-color: #ffffff; /* Cor de fundo preta */
-    color: #070303; /* Cor do texto */
+    background-color: #0a0e14; /* Cor de fundo preta */
+    color: #39ff14; /* Cor do texto */
     max-width: 720px;
     width: 90%;
     margin-left: auto;
