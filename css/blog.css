@@ -55,3 +55,13 @@ main {
     transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
+footer {
+    border: 0px;
+    background: transparent url("/assets/img/hr-black.png") center center repeat-x;
+    height: 3px;
+    margin-bottom: 50px;
+    margin: 30px 0px 60px 0px;
+    outline: none;
+    padding-top: 30px;
+    text-align: center;
+}
