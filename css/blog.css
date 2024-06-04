@@ -24,7 +24,7 @@ main {
 
 .blog-post {
     background-color: #1c1f26;
-    border: 2px solid #39424e;
+    border: 2px solid #07ff00;
     padding: 20px;
     margin: 20px 0;
     border-radius: 10px;
@@ -64,4 +64,17 @@ footer {
     outline: none;
     padding-top: 30px;
     text-align: center;
+}
+
+code:not([class]) {
+    line-height: normal;
+    background: rgba(135, 131, 120, 0.15);
+    color: #EB5757;
+    border-radius: 3px;
+    font-size: 85%;
+    padding: 0.2em 0.4em;
+}
+
+code {
+    font-family: monospace;
 }
