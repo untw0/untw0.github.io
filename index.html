@@ -2,33 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="./icons/wallpaper/aranha.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>untw0 blog</title>
     <link rel="stylesheet" href="./css/blog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
-        <h1>My Blog</h1>
+        <nav class="navbar">
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+            <ul class="social-links">
+                <li><a href="https://youtube.com/@untw0" target="_blank"><i class="fab fa-youtube"></i></a></li>
+                <li><a href="https://www.instagram.com/untw0" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                <li><a href="https://www.linkedin.com/in/maiquel-paiva" target="_blank"><i class="fab fa-linkedin"></i></a></li>
+                <li><a href="https://www.github.com/untw0" target="_blank"><i class="fab fa-github"></i></a></li>
+            </ul>
+        </nav>
     </header>
     <main>
         <article class="blog-post">
-            <a href="paper/javascript-obfuscation-and-deobfuscation.html">
+            <a href="paper/javascript.html">
                 <h2>JavaScript Obfuscation and Deobfuscation</h2>
-                <p class="date">Maio 28, 2024 • 10 min • @untw0</p>
+                <p class="date">Maio 28, 2024 • @untw0</p>
                 <p>Understanding how Obfuscation and Deobfuscation works, Let's understand how this is good and dangerous at the same time.</p>
             </a>
         </article>
         <article class="blog-post">
-            <a href="paper/cpu-and-assembly.html">
-                <h2>Understanding CPU Architecture Using Assembly Code</h2>
-                <p class="date">Jun 01, 2024 • 2 min • @untw0</p>
-                <p>Talking a little about CPU and Assembly, the goal is to understand how everything works.</p>
+            <a href="paper/keylogger.html">
+                <h2>Understanding How a Keylogger Works in Practice</h2>
+                <p class="date">Jun 06, 2024 • @untw0</p>
+                <p>By creating a Keylogger in C++ and understanding how it works and how it acts, do you know what its real objectives are?</p>
+            </a>
+        </article>
+        <article class="blog-post">
+            <a href="paper/dll-malware.html">
+                <h2>DLL Malware: A Growing Threat on the Global Scenario</h2>
+                <p class="date">Jun 13, 2024 • @untw0</p>
+                <p>Let's see how these dll malwares work and why they are being widely used in cyberattacks.</p>
             </a>
         </article>
     </main>
-    <footer>
-        <a href="about.html">/about.html</a>
-    </footer>
     <script src="script.js"></script>
 </body>
 </html>
