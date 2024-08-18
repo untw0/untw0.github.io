@@ -1,0 +1,335 @@
+:root {
+    --base-color: #038f02;
+    --bg-color: #e2e2e2;
+    --link-color: #39ff14;
+    --color-blue: #3e6ff7;
+    --color-green: #2ded4d;
+    --color-orange: #ed7f25;
+    --color-purple: #9125ed;
+    --color-red: #ef0b21;
+    --color-pink: #ed257a;
+    --color-white: #e2e2e2;
+    --code-color-1: #e2e2e2;
+    --code-color-2: #e2e2e2;
+    --code-color-3: #ef0b21;
+    --code-color-4: #F0A0A0;
+    --code-color-5: #0000aa;
+    --code-color-6: #2ded4d;
+    --code-color-7: #aa0000;
+    --code-color-8: #000080;
+    --code-color-9: #00aa00;
+    --code-color-10: #888888;
+    --code-color-11: #555555;
+    --code-color-12: #800080;
+    --code-color-13: #00aaaa;
+    --code-color-14: #009999;
+    --code-color-15: #aa5500;
+    --code-color-16: #1e90ff;
+    --code-color-17: #800000;
+    --code-color-18: #bbbbbb;
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+::-moz-selection {
+    color: var(--bg-color);
+    background: var(--base-color);
+}
+
+::selection {
+    color: var(--bg-color);
+    background: var(--base-color);
+}
+
+.box {
+    box-shadow: 4px 5px 0px 0px var(--base-color);
+    border: 1px solid var(--base-color);
+    margin-bottom: 20px;
+}
+
+.sprite {
+    margin-right: 10px;
+    position: relative;
+    top: 3px;
+    width: 3%;
+}
+
+a {
+    color: var(--link-color);
+}
+
+a:hover {
+    color: var(--bg-color);
+    background-color: var(--link-color);
+    text-decoration: none;
+}
+
+h1, h2, h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+body {
+    font-family: "Lucida Consola", monospace;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    background-color: #0a0e14; 
+    color: #39ff14;
+    max-width: 720px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+header {
+    margin: 25px auto 25px auto;
+}
+
+header hr {
+    border: 0px;
+    background: transparent url("/assets/img/hr-black.png") center center repeat-x;
+    height: 3px;
+    margin: 10px 0px 20px 0px;
+    outline: none;
+}
+
+header h1 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+nav {
+    font-size: 19px;
+}
+
+nav ul li {
+    display: inline;
+}
+
+.nav-left {
+    float: left;
+}
+
+.nav-left ul li {
+    margin-right: 10px;
+}
+
+.nav-right {
+    float: right;
+}
+
+.nav-right ul li {
+    margin-left: 10px;
+}
+
+main {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+main ul {
+    margin-left: 45px;
+}
+
+main p img {
+    box-shadow: 4px 5px 0px 0px #000;
+    border: 1px solid var(--base-color);
+    display: block;
+    height: auto;
+    max-width: 100%;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+footer {
+    border: 0px;
+    background: transparent url("/assets/img/hr-black.png") center center repeat-x;
+    height: 3px;
+    margin-bottom: 50px;
+    margin: 30px 0px 60px 0px;
+    outline: none;
+    padding-top: 30px;
+    text-align: center;
+}
+
+#search-input {
+    background-color: transparent;
+    outline: none;
+    border-style: none;
+    width: 100%;
+    padding: 1rem;
+}
+
+.post h1, .post h2, .post h3 {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--base-color);
+}
+
+.post .header {
+    text-align: center;
+}
+
+.post .header h1 {
+    border-bottom: none;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.post .header .tldr {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.post-overview {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+}
+
+.post-overview h2 {
+    margin-bottom: 0px;
+}
+
+.post-overview .description {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-indent: 50px;
+}
+
+.pagination {
+    text-align: center;
+}
+
+ol {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 70px;
+}
+
+.profile-picture {
+    float: left;
+    margin-right: 20px;
+    width: 30%;
+}
+
+.project-overview {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+}
+
+.project-overview h2 img {
+    margin-left: 10px;
+    position: relative;
+    top: 3px;
+}
+
+@media screen and (max-width: 45rem) {
+    * {
+        font-size: 13px;
+    }
+
+    img {
+        max-width: 50%;
+    }
+
+    .nav-left ul li {
+        margin-right: 0px;
+    }
+
+    .nav-right ul li {
+        margin-left: 0px;
+    }
+
+    header h1 {
+        font-size: 19px;
+    }
+}
+
+#background-video {
+    bottom: 0px;
+    height: 100vh;
+    left: 0px;
+    object-fit: cover;
+    opacity: 10%;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    width: 100vw;
+    z-index: -1;
+}
+
+.highlight pre {
+    box-shadow: 4px 5px 0px 0px var(--base-color);
+    border: 1px solid var(--base-color);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.language-plaintext {
+    background-color: var(--base-color);
+    border-radius: 3px;
+    color: #ff9446;
+}
+
+nav {
+    width: 100%;
+    background-color: #000000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    display: block;
+    color: rgb(0, 255, 34);
+    padding: 1rem;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+}
+
+section#home {
+    max-width: 500px;
+    padding: 1rem;
+    background-color: #000000;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin-top: 5rem;
+}
+
+section#home img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 2rem;
+    border-radius: 5px;
+}
+
+/* Leia aqui o conteúdo abaixo e você entenderá o porque disso está assim
+/* https://untw0.github.io/javascript-obfuscation
