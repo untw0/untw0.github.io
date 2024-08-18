@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" href="./photos/esqueleto.gif"/>
+    <link rel="stylesheet" type="text/css" href="../styles/papers-style.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>JavaScript Obfuscation and Deobfuscation</title>
+  </head>
+  <body>
+    </header>
+    <main>
+      <div class="post">
+<div class="header">
+  <h1>JavaScript Obfuscation and Deobfuscation</h1>
+<p>May 28, 2024 | Author: Maiquel Paiva (<a href="https://twitter.com/untw0">@untw0</a>)</p></div>
+
+<p><img src="../photos/javascript-obfuscation/banner.png"></p>
+
+<h1>Introduction</h1>
+<p>In digital environments, many malicious actors resort to the practice of obfuscating their code, making it less detectable by security systems and less understandable to other developers. The ability to deobfuscate such code is a valuable technique in various real-world contexts, such as in the evaluation of web applications, allowing the identification of attempts by developers to conceal sensitive data. Additionally, defenders can use this skill to analyze and deobfuscate code responsible for attacks, such as in phishing cases.</p>
+ㅤ
+<p>Malicious actors have various reasons for obfuscating their code. Among them, the intention to avoid detection by security systems, hinder analysis by security analysts, protect intellectual property, and facilitate the spread of attacks, such as phishing, stand out. Overall, code obfuscation is a common practice among malicious actors, used to increase the effectiveness and stealth of their malicious activities.</p>
+
+<h1>Obfuscation</h1>
+<p>A typical example of code obfuscation involves transforming simple JavaScript code into a highly obfuscated version. For instance, code obfuscators often transform the code into a dictionary of all words and symbols used within the code and then attempt to reconstruct the original code during execution by referring to each word and symbol from the dictionary. The following is an example of simple JavaScript code being obfuscated:</p>
+<p><h2>Unobfuscated Code:</h2></p>
+<p><img src="../photos/javascript-obfuscation/1.png"></p>
+<p><h2>Obfuscated Code:</h2></p>
+<p><img src="../photos/javascript-obfuscation/2.png"></p>
+
+<p>Obfuscation is generally done through automated tools available for various programming languages. While many online tools perform this task, malicious actors and professional developers often create their own tools to increase the difficulty of deobfuscation.</p>
+ㅤ
+<p>A common way to reduce the readability of JavaScript code while keeping it functional is minification. Minification compresses the code into a single line, which is particularly useful for larger scripts. However, minification is only a first step compared to more advanced obfuscation techniques.</p>
+ㅤ
+<p>The above example uses an obfuscation technique known as "packing," recognizable by the six function arguments used in the initial function function(p,a,c,k,e,d). Packing tools typically convert all words and symbols in the code into a list or dictionary and then refer to them using the function (p,a,c,k,e,d) to reconstruct the original code during execution. The (p,a,c,k,e,d) pattern can vary between different packers but usually follows a specific order to organize the words and symbols of the original code.</p>
+
+<h1 id="recap-and-questions">Recap and Questions</h1>
+
+<p>> Why is obfuscation often used with JavaScript?</p>
+ㅤ
+<p>Code in interpreted languages like Python, PHP, and JavaScript is published and executed directly without needing to be compiled. While Python and PHP are generally used on the server side, invisible to users, JavaScript is commonly used in users' browsers, where the code is visible and executed directly. Therefore, it is often necessary to obfuscate JavaScript code to protect it.</p>
+ㅤ
+<p>> Can Obfuscation Be Used for Malicious Activities?</p>
+ㅤ
+<p>Yes, obfuscation can be used for malicious activities. Malicious actors frequently employ this technique to hide the purpose and functionality of their code, making it harder for security systems to detect and for security analysts to analyze.</p>
+
+<h1>Example of Obfuscation for Malicious Uses</h1>
+
+<h2>Unobfuscated Phishing Code:</h2>
+<p><img src="../photos/javascript-obfuscation/3.png"></p>
+
+<h2>Obfuscated Phishing Code:</h2>
+<p><img src="../photos/javascript-obfuscation/4.png"></p>
+
+<p>The unobfuscated phishing code in JS captures login data entered by the user and sends it to a server controlled by an attacker. When obfuscated, the code becomes significantly harder to understand, complicating the detection of malicious behavior.</p>
+
+<h1>Personal Information Theft</h1>
+
+<h2>Unobfuscated Code:</h2>
+<p><img src="../photos/javascript-obfuscation/5.png"></p>
+<h2>Obfuscated Code:</h2>
+<p><img src="../photos/javascript-obfuscation/6.png"></p>
+
+<p>Obfuscation can be used to hide scripts that collect personal information, such as credit card numbers, addresses, and other sensitive information, and send it to a server controlled by an attacker.</p>
+
+<h1>A Real Example of Obfuscated Malware</h1>
+<p>Obfuscation is a technique used to make a script harder to read by humans while maintaining its functionality from a technical standpoint, though it can impact performance. Typically, this technique is automatically applied by obfuscation tools that take the original code and rewrite it in a way that makes it more complex to read.</p>
+
+<h2>Discord Selfbot</h2>
+<p>Obfuscation methods are frequently used by malicious individuals on Discord to create "selfbots." Selfbots are scripts that allow a user to automate actions on the Discord platform, often in violation of Discord's Terms of Service. Let's see how this works:</p>
+<p><img src="../photos/javascript-obfuscation/7.png"></p>
+
+<h2>Operation of a Malicious Selfbot</h2>
+<p>These obfuscation methods are often used by malicious individuals on Discord. They create a "selfbot" that, when executed, compromises the user's computer, often without their knowledge. Let's examine how this works, starting with the structure of the selfbot.</p>
+
+<h2>Selfbot Folder Structure</h2>
+<p>The selfbot folder structure is usually well-organized, making it appear to be a legitimate script. However, it can contain malware, such as a keylogger that monitors everything typed on the victim's computer. Once executed, the only way to get rid of it is by formatting the computer. This file looks innocent, setting up some basic variables needed for the selfbot to function, including the user's account token.</p>
+<p><img src="../photos/javascript-obfuscation/8.png"></p>
+
+<h2>index.js File and External Libraries (Libs)</h2>
+<p>The real danger lies in the index.js file or, in some cases, in the libraries installed within the selfbot folder (usually organized in a folder called lib). Many people run this file without knowing it contains malicious code. Here, a keylogger is installed on the computer, compromising all typed information, including passwords. Changing the password won't help, as the hacker will continue to receive all new passwords. The only solution is to format the computer. Additionally, selfbots often use external libraries. Even if the index.js doesn't show anything suspicious after deobfuscation, it's likely that included libraries contain the malicious code, such as hidden keyloggers.</p>
+<p><img src="../photos/javascript-obfuscation/9.png"></p>
+
+    </main>
+    <footer>
+      <a href="../papers.html">/papers.html</a>
+    </footer>
+  </body>
+</html>
