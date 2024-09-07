@@ -107,7 +107,7 @@
 
         <ul>
             <li><strong>Verificação da String</strong>: A função usa <code>strncmp</code> para comparar uma string fornecida (em <code>%rdi</code>) com a string <code>0xdeadbeef</code>. A comparação é feita em 4 bytes (<code>%edx</code> é 4).</li>
-            <li><strong>Checagem de Stack Canaries</strong>: A proteção contra corrupção de stack (canary) é feita através do uso de <code>%fs:0x28</code>. Se a verificação do canary falhar, a função chama <code>__stack_chk_fail</code>, isso resultaria na interrupção imediata do programa, dificultando assim exploração das nossas vulnerabilidades.</li>
+            <li><strong>Checagem de Stack Canaries</strong>: A proteção contra corrupção de stack (canary) é feita através do uso de <code>%fs:0x28</code>. Se a verificação do canary falhar, a função chama <code>__stack_chk_fail</code>, isso resultaria na interrupção imediata do programa, dificultando assim a exploração das nossas vulnerabilidades.</li>
         </ul>
 
         <h2>Construção do Payload</h2>
@@ -116,7 +116,7 @@
 
         <ul>
             <li><strong>Fornecer o Valor Correto</strong>: O valor esperado na comparação é <code>0xdeadbeef</code>. Portanto, o payload deve conter esse valor.</li>
-            <li><strong>Explorar a Stack Canary</strong>: O valor do stack canary é armazenado em <code>%fs:0x28</code> e deve ser preservado. Caso contrário, a função chamará <code>__stack_chk_fail</code>, e mais uma vez, isso resultaria na interrupção imediata do programa, dificultando assim exploração das nossas vulnerabilidades.</li>
+            <li><strong>Explorar a Stack Canary</strong>: O valor do stack canary é armazenado em <code>%fs:0x28</code> e deve ser preservado. Caso contrário, a função chamará <code>__stack_chk_fail</code>, e mais uma vez, isso resultaria na interrupção imediata do programa, dificultando assim a exploração das nossas vulnerabilidades.</li>
         </ul>
 
         <h2>Construção do Exploit Script</h2>
