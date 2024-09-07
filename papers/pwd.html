@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pwn Challenge</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h2, h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p, li {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        pre {
+            font-size: 1rem;
+            overflow-x: auto;
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        code {
+            font-size: 1rem;
+            color: #dcdcaa;
+            background: #333;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Contornando a Verificação de String e Lendo a Flag</h1>
+
+        <p>Welcome, eu sou @untw0, e o objetivo de hoje é contornar a verificação de uma string e ler a flag. A função <code>bypass_me</code> é a principal responsável por essa verificação. Vamos revisar a função e detalhar o processo para criar um exploit que permita contornar essa verificação e acessar a flag.</p>
+
+        <h2>Análise da Função <code>bypass_me</code></h2>
+
+        <p>Aqui está a função <code>bypass_me</code> em assembly:</p>
+
+        <pre>
+0x00005bb3a8b100da &lt;+0&gt;:     endbr64
+0x00005bb3a8b100de &lt;+4&gt;:     push   %rbp
+0x00005bb3a8b100df &lt;+5&gt;:     mov    %rsp,%rbp
+0x00005bb3a8b100e2 &lt;+8&gt;:     sub    $0x20,%rsp
+0x00005bb3a8b100e6 &lt;+12&gt;:    mov    %rdi,-0x18(%rbp)  &lt;===== Armazena o primeiro argumento (string) no stack
+0x00005bb3a8b100ea &lt;+16&gt;:    mov    %fs:0x28,%rax
+0x00005bb3a8b100f3 &lt;+25&gt;:    mov    %rax,-0x8(%rbp)
+0x00005bb3a8b100f7 &lt;+29&gt;:    xor    %eax,%eax
+0x00005bb3a8b100f9 &lt;+31&gt;:    movl   $0xdeadbeef,-0xc(%rbp)  &lt;===== Valor da string esperada para comparação
+0x00005bb3a8b10100 &lt;+38&gt;:    lea    -0xc(%rbp),%rcx  &lt;===== Endereço da string `0xdeadbeef` para passar ao `strncmp`
+0x00005bb3a8b10104 &lt;+42&gt;:    mov    -0x18(%rbp),%rax  &lt;===== Primeiro argumento (string) para `strncmp`
+0x00005bb3a8b10108 &lt;+46&gt;:    mov    $0x4,%edx  &lt;===== Número de bytes para comparar (4 bytes)
+0x00005bb3a8b1010d &lt;+51&gt;:    mov    %rcx,%rsi  &lt;===== String esperada
+0x00005bb3a8b10110 &lt;+54&gt;:    mov    %rax,%rdi  &lt;===== String fornecida
+0x00005bb3a8b10113 &lt;+57&gt;:    call   0x5bb3a8b0f1b0 &lt;strncmp@plt&gt;  &lt;===== Chamada da função `strncmp`
+0x00005bb3a8b10118 &lt;+62&gt;:    test   %eax,%eax
+0x00005bb3a8b1011a &lt;+64&gt;:    jne    0x5bb3a8b10123 &lt;bypass_me+73&gt;  &lt;===== Verifica o resultado da comparação
+0x00005bb3a8b1011c &lt;+66&gt;:    mov    $0x1,%eax
+0x00005bb3a8b10121 &lt;+71&gt;:    jmp    0x5bb3a8b10128 &lt;bypass_me+78&gt;
+0x00005bb3a8b10123 &lt;+73&gt;:    mov    $0x0,%eax
+0x00005bb3a8b10128 &lt;+78&gt;:    mov    -0x8(%rbp),%rdx
+0x00005bb3a8b1012c &lt;+82&gt;:    xor    %fs:0x28,%rdx
+0x00005bb3a8b10135 &lt;+91&gt;:    je     0x5bb3a8b1013c &lt;bypass_me+98&gt;
+0x00005bb3a8b10137 &lt;+93&gt;:    call   0x5bb3a8b0f220 &lt;__stack_chk_fail@plt&gt;  &lt;===== Falha na proteção do stack se o canary não for correto
+0x00005bb3a8b1013c &lt;+98&gt;:    leave
+0x00005bb3a8b1013d &lt;+99&gt;:    ret
+        </pre>
+
+        <h2>Compreensão da Função</h2>
+
+        <ul>
+            <li><strong>Verificação da String</strong>: A função usa <code>strncmp</code> para comparar uma string fornecida (em <code>%rdi</code>) com a string <code>0xdeadbeef</code>. A comparação é feita em 4 bytes (<code>%edx</code> é 4).</li>
+            <li><strong>Checagem de Stack Canaries</strong>: A proteção contra corrupção de stack (canary) é feita através do uso de <code>%fs:0x28</code>. Se a verificação do canary falhar, a função chama <code>__stack_chk_fail</code>, isso resultaria na interrupção imediata do programa, dificultando assim exploração das nossas vulnerabilidades.</li>
+        </ul>
+
+        <h2>Construção do Payload</h2>
+
+        <p>Para contornar a verificação e ler a flag, eu precisei:</p>
+
+        <ul>
+            <li><strong>Fornecer o Valor Correto</strong>: O valor esperado na comparação é <code>0xdeadbeef</code>. Portanto, o payload deve conter esse valor.</li>
+            <li><strong>Explorar a Stack Canary</strong>: O valor do stack canary é armazenado em <code>%fs:0x28</code> e deve ser preservado. Caso contrário, a função chamará <code>__stack_chk_fail</code>, e mais uma vez, isso resultaria na interrupção imediata do programa, dificultando assim exploração das nossas vulnerabilidades.</li>
+        </ul>
+
+        <h2>Construção do Exploit Script</h2>
+        <p>Utilizando o pwntools para realizar a construção do nosso exploit script:</p>
+
+        <pre><code>from pwn import *
+
+target = '/caminho/do/binario' <= coloque o binário alvo 
+p = process(target)
+
+# Payload com o valor correto
+payload = p64(aqui) <= coloque o valor 
+p.sendline(payload)
+
+# Recebendo a nossa flag por direito >:)
+flag = p.recvall()
+print(flag.decode())
+        </code></pre>
+
+        <h2>Resultado Final</h2>
+
+        <p>Executando o exploit script, conseguimos obter a flag:</p>
+
+        <pre><code>untw0@pwn-student:~/challenge$ python3 exploit.py
+[+] Starting local process 'caminho/do/binario': pid 5700
+[+] Receiving all data: Done (6.85KB)
+[*] Process 'caminho/do/binario' stopped with exit code 0 (pid 5700)
+
+============================ 绿毛虫! ============================
+###
+### 在正式挑战 绿毛虫 之前，请仔细阅读并学习描述中的战斗技巧
+### 如果感到吃力，请先尝试战胜其他低等级的宝可梦
+### 祝你好运 :)
+###
+pwn{sem-explanacoes-de-flag-por-aqui}
+made in @untw0 >:)
+
+### 2024年9月7日11:2:57 战斗记录: 绿毛虫 获胜
+### 努力提升自己的等级后，再来挑战吧！
+        </code></pre>
+    </div>
+</body>
+</html>
