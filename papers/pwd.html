@@ -75,6 +75,10 @@
         <p>Aqui está a função <code>bypass_me</code> em assembly:</p>
 
         <pre>
+(gdb) break bypass_me
+Breakpoint 1 at 0x20e2
+(gdb) disassemble /m 0x20e2
+Dump of assembler code for function bypass_me:
 0x00005bb3a8b100da &lt;+0&gt;:     endbr64
 0x00005bb3a8b100de &lt;+4&gt;:     push   %rbp
 0x00005bb3a8b100df &lt;+5&gt;:     mov    %rsp,%rbp
