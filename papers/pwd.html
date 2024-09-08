@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pwn Challenge</title>
+    <title>Researcher Pwn Challenge</title>
     <style>
         body {
             background-color: black;
@@ -68,7 +68,7 @@
     <div class="container">
         <h1>Contornando a Verificação de String e Lendo a Flag</h1>
 
-        <p>Fala pessoal, eu sou @untw0, e o objetivo de hoje é contornar a verificação de uma string e ler a flag. A função <code>bypass_me</code> é a principal responsável por essa verificação. Vamos revisar a função e detalhar o processo para criar um exploit que permita contornar essa verificação e acessar a flag.</p>
+        <p>Welcome, eu sou @untw0, e o objetivo de hoje é contornar a verificação de uma string e ler a flag. A função <code>bypass_me</code> é a principal responsável por essa verificação. Vamos revisar a função e detalhar o processo para criar um exploit que permita contornar essa verificação e acessar a flag.</p>
 
         <h2>Análise da Função <code>bypass_me</code></h2>
 
@@ -105,9 +105,11 @@
 
         <h2>Compreensão da Função</h2>
 
+        <p>A função <code>bypass_me</code> verifica se a string fornecida é igual a <code>0xdeadbeef</code>. Se a string for igual, a função retorna 1, indicando que a verificação foi bem-sucedida. Caso contrário, ela retorna 0. Além disso, se o valor do canary de stack não for alterado durante a execução da função, o programa não chamará <code>__stack_chk_fail</code>, evitando falhas de proteção de stack e facilitando a exploração.</p>
+
         <ul>
             <li><strong>Verificação da String</strong>: A função usa <code>strncmp</code> para comparar uma string fornecida (em <code>%rdi</code>) com a string <code>0xdeadbeef</code>. A comparação é feita em 4 bytes (<code>%edx</code> é 4).</li>
-            <li><strong>Checagem de Stack Canaries</strong>: A proteção contra corrupção de stack (canary) é feita através do uso de <code>%fs:0x28</code>. Se a verificação do canary falhar, a função chama <code>__stack_chk_fail</code>, isso resultaria na interrupção imediata do programa, dificultando assim a exploração das nossas vulnerabilidades.</li>
+            <li><strong>Checagem de Stack Canaries</strong>: A proteção contra corrupção de stack (canary) é feita através do uso de <code>%fs:0x28</code>. Se a verificação do canary falhar, a função chama <code>__stack_chk_fail</code>, resultando na interrupção imediata do programa e dificultando a exploração de vulnerabilidades.</li>
         </ul>
 
         <h2>Construção do Payload</h2>
@@ -116,7 +118,7 @@
 
         <ul>
             <li><strong>Fornecer o Valor Correto</strong>: O valor esperado na comparação é <code>0xdeadbeef</code>. Portanto, o payload deve conter esse valor.</li>
-            <li><strong>Explorar a Stack Canary</strong>: O valor do stack canary é armazenado em <code>%fs:0x28</code> e deve ser preservado. Caso contrário, a função chamará <code>__stack_chk_fail</code>, e mais uma vez, isso resultaria na interrupção imediata do programa, dificultando assim a exploração das nossas vulnerabilidades.</li>
+            <li><strong>Explorar a Stack Canary</strong>: O valor do stack canary é armazenado em <code>%fs:0x28</code> e deve ser preservado. Caso contrário, a função chamará <code>__stack_chk_fail</code>, resultando na interrupção imediata do programa e dificultando a exploração.</li>
         </ul>
 
         <h2>Construção do Exploit Script</h2>
@@ -127,36 +129,15 @@
 target = '/caminho/do/binario' <= coloque o binário alvo 
 p = process(target)
 
-# Payload com o valor correto
-payload = p64(aqui) <= coloque o valor 
+# Preparar o payload
+payload = p64(0xdeadbeef)
+
+# Enviar o payload
 p.sendline(payload)
 
-# Recebendo a nossa flag por direito >:)
+# Lê a flag
 flag = p.recvall()
-print(flag.decode())
-        </code></pre>
-
-        <h2>Resultado Final</h2>
-
-        <p>Executando o exploit script, conseguimos obter a flag:</p>
-
-        <pre><code>untw0@pwn-student:~/challenge$ python3 exploit.py
-[+] Starting local process 'caminho/do/binario': pid 5700
-[+] Receiving all data: Done (6.85KB)
-[*] Process 'caminho/do/binario' stopped with exit code 0 (pid 5700)
-
-============================ 绿毛虫! ============================
-###
-### 在正式挑战 绿毛虫 之前，请仔细阅读并学习描述中的战斗技巧
-### 如果感到吃力，请先尝试战胜其他低等级的宝可梦
-### 祝你好运 :)
-###
-pwn{sem-explanacoes-de-flag-por-aqui}
-made in @untw0 >:)
-
-### 2024年9月7日11:2:57 战斗记录: 绿毛虫 获胜
-### 努力提升自己的等级后，再来挑战吧！
-        </code></pre>
+print(flag.decode())</code></pre>
     </div>
 </body>
 </html>
