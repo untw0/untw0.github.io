@@ -72,7 +72,7 @@
 <code>[untw@untw orw]$ file ./orw
 ./orw: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=e60ecccd9d01c8217387e8b77e9261a1f36b5030, not stripped</code>
 </pre>
-<p>Utilizei o comando <code>file</code> para inspecionar o <code>binário orw</code>. O resultado revelou que se trata de um executável <code>ELF</code> de <code>32 bits</code>, compilado para a arquitetura <code>Intel 80386</code> e dinamicamente vinculado, o que significa que depende de bibliotecas externas para rodar. O binário não está <code>"stripped"</code>, permitindo acesso a símbolos de depuração, facilitando a análise para identificar possíveis vulnerabilidades.</p>
+<p>Para começar utilizei o comando <code>file</code> para inspecionar o <code>binário orw</code> e o resultado revelou que se trata de um executável <code>ELF</code> de <code>32 bits</code>, compilado para a arquitetura <code>Intel 80386</code> e dinamicamente vinculado, o que significa que depende de bibliotecas externas para rodar. O binário não está <code>"stripped"</code>, permitindo acesso a símbolos de depuração, facilitando a análise para identificar possíveis vulnerabilidades.</p>
         
 <pre>
 <code>[untw@untw orw]$ checksec orw
@@ -94,7 +94,7 @@ RWX:      Has RWX segments</code>
 Give my your shellcode:aaaaaaa
 Segmentation fault</code>
 </pre>
-<p>Ao executar o binário orw e fornecer a entrada <code>"aaaaaaa"</code> como <code>shellcode</code>, o programa falhou com um <code>Segmentation Fault</code>. Esse comportamento sugere a presença de uma vulnerabilidade de <code>buffer overflow</code>, permitindo a exploração de áreas de memória não autorizadas. Esse resultado confirma a possibilidade de injeção de código no processo, um passo crucial na exploração de vulnerabilidades.</p>
+<p>Depois de executar o binário orw e colocar <code>"aaaaaaa"</code> como <code>"shellcode"</code>, o programa falhou com um <code>Segmentation Fault</code>. Esse comportamento sugere a presença de uma vulnerabilidade de <code>buffer overflow</code>, permitindo a exploração de áreas de memória não autorizadas. Esse resultado confirma a possibilidade de injeção de código no processo, um passo crucial na exploração de vulnerabilidades.</p>
         
 <pre>
 <code>[untw@untw orw]$ seccomp-tools dump ./orw
@@ -113,7 +113,7 @@ line  CODE  JT   JF      K
 0010: 0x06 0x00 0x00 0x00050026  return ERRNO(38)
 0011: 0x06 0x00 0x00 0x7fff0000  return ALLOW</code>
 </pre>
-<p>Utilizei o comando <code>seccomp-tools dump</code> para examinar as regras do filtro <code>Seccomp</code> no binário orw. O filtro verifica a arquitetura e limita as chamadas de sistema permitidas, como <code>exit</code>, <code>open</code>, <code>read</code>, e <code>write</code>. Chamadas não autorizadas resultam em um erro <code>(ERRNO 38)</code>. Essa configuração ajuda a proteger o programa contra certas explorações, mas também indica quais chamadas podem ser potencialmente usadas em um ataque.</p>
+<p>Usei o comando <code>seccomp-tools dump</code> para examinar as regras do filtro <code>Seccomp</code> no binário orw. O filtro verifica a arquitetura e limita as chamadas de sistema permitidas, como <code>exit</code>, <code>open</code>, <code>read</code>, e <code>write</code>. Chamadas não autorizadas resultam em um erro <code>(ERRNO 38)</code>. Essa configuração ajuda a proteger o programa contra certas explorações, mas também indica quais chamadas podem ser potencialmente usadas em um ataque.</p>
      
 <h3>GDB Disassemble</h3>
 <pre>
@@ -151,7 +151,7 @@ Dump of assembler code for function main:
     <li><code>mov eax,0x804a060 e call eax</code>: Executa código a partir de um endereço arbitrário, que é a base para a execução do shellcode, aumentando o risco de exploração.</li>
 </ul>
         
-<p>Depois de fazer a engenharia reversa do binário orw, notamos que o programa simplesmente executa o shellcode fornecido pelo usuário. A função <code>main</code>, após configurar a pilha e chamar a função <code>orw_seccomp</code>, lê a entrada do usuário com read e a utiliza para chamar uma função que executa o shellcode. Isso é evidente na linha <code>call eax</code>, onde o endereço do shellcode é diretamente passado para execução, sem mais verificações ou validações.</p>
+<p>Depois de fazer a engenharia reversa do binário orw, podemos notar que o programa simplesmente executa o shellcode fornecido pelo usuário. A função <code>main</code>, após configurar a pilha e chamar a função <code>orw_seccomp</code>, lê a entrada do usuário com read e a utiliza para chamar uma função que executa o shellcode. Isso é evidente na linha <code>call eax</code>, onde o endereço do shellcode é diretamente passado para execução, sem mais verificações ou validações.</p>
         
 <p>A simplicidade no fluxo do programa expõe uma vulnerabilidade clara, tornando-o suscetível a explorações, como buffer overflow, já que qualquer shellcode fornecido pode ser executado. A análise do código revela que a funcionalidade principal do programa é apenas essa, o que enfatiza a importância de garantir medidas de segurança adequadas.</p>
         
@@ -186,7 +186,7 @@ r.interactive()</code>
 \xf7\x00\x10u\xf7\x00\x00\x00\x007\x96[*] Got EOF while reading in interactive
 $</code>
 </pre>
-<p>Após executar o exploit, consegui abrir uma conexão com o serviço remoto e recebi a flag: <code>FLAG{achou-que-ia-ter-flag-de-graca-kkkk}</code>. O sucesso do exploit confirma a eficácia da exploração da vulnerabilidade de buffer overflow no binário orw.</p>
+<p>Após executar o exploit, consegui abrir uma conexão com o serviço remoto e recebi a flag: <code>FLAG{achou-que-ia-ter-flag-de-graca-kkkk}</code>.</p>
 </div>
 </body>
 </html>
