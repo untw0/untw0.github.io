@@ -151,7 +151,7 @@ Dump of assembler code for function main:
     <li><code>mov eax,0x804a060 e call eax</code>: Executa código a partir de um endereço arbitrário, que é a base para a execução do shellcode, aumentando o risco de exploração.</li>
 </ul>
         
-<p>Ao realizar a engenharia reversa do binário orw, observa-se que o programa simplesmente executa o shellcode fornecido pelo usuário. A função main, após configurar a pilha e chamar a função orw_seccomp, lê a entrada do usuário com read e a utiliza para chamar uma função que executa o shellcode. Isso é evidente na linha <code>call eax</code>, onde o endereço do shellcode é diretamente passado para execução, sem mais verificações ou validações.</p>
+<p>Depois de fazer a engenharia reversa do binário orw, notamos que o programa simplesmente executa o shellcode fornecido pelo usuário. A função <code>main</code>, após configurar a pilha e chamar a função <code>orw_seccomp</code>, lê a entrada do usuário com read e a utiliza para chamar uma função que executa o shellcode. Isso é evidente na linha <code>call eax</code>, onde o endereço do shellcode é diretamente passado para execução, sem mais verificações ou validações.</p>
         
 <p>A simplicidade no fluxo do programa expõe uma vulnerabilidade clara, tornando-o suscetível a explorações, como buffer overflow, já que qualquer shellcode fornecido pode ser executado. A análise do código revela que a funcionalidade principal do programa é apenas essa, o que enfatiza a importância de garantir medidas de segurança adequadas.</p>
         
