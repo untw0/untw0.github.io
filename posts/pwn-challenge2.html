@@ -85,7 +85,7 @@ PIE:      No PIE (0x8048000)
 Stack:    Executable
 RWX:      Has RWX segments</code>
 </pre>
-<p>Utilizei o comando <code>checksec</code> para identificar as proteções de segurança habilitadas no binário. O binário possui Partial <code>RELRO</code>, <code>Stack Canary</code>, mas apresenta vulnerabilidades como a ausência de <code>NX</code> e <code>PIE</code>, além de ter a pilha executável e segmentos <code>RWX</code>, tornando-o suscetível a exploits baseados em execução de código na pilha e manipulação de endereços fixos.</p>
+<p>Depois usei o comando <code>checksec</code> para identificar as proteções de segurança habilitadas no binário. O binário possui Partial <code>RELRO</code>, <code>Stack Canary</code>, mas apresenta vulnerabilidades como a ausência de <code>NX</code> e <code>PIE</code>, além de ter a pilha executável e segmentos <code>RWX</code>, tornando-o suscetível a exploits baseados em execução de código na pilha e manipulação de endereços fixos.</p>
 
 <h3>Executando Binário</h3>   
 
