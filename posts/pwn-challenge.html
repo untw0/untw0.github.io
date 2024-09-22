@@ -2,24 +2,24 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Researcher Pwn Challenge</title>
-    <link rel="stylesheet" href="../styles/paper.css">
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Researcher Pwn Challenge</title>
+<link rel="stylesheet" href="../styles/paper.css">
 </head>
 
 <body>
     <div class="container">
-        <h1>Bypassing String Verification and Reading the CTF Flag</h1>
+<h1>Bypassing String Verification and Reading the Flag</h1>
 
-        <p>Hey everyone, I'm @untw0, and today's goal is to bypass string verification and read the flag. The <code>bypass_me</code> function is primarily responsible for this verification. Let's review the function and break down the process of crafting an exploit that bypasses this verification and gains access to the flag.</p>
+<p>Hey everyone, I'm @untw0, and today's goal is to bypass string verification and read the flag. The <code>bypass_me</code> function is primarily responsible for this verification. Let's review the function and break down the process of crafting an exploit that bypasses this verification and gains access to the flag.</p>
 
-        <h2>Analysis of the <code>bypass_me</code> Function</h2>
+<h2>Analysis of the <code>bypass_me</code> Function</h2>
 
-        <p>Here is the <code>bypass_me</code> function in assembly:</p>
+<p>Here is the <code>bypass_me</code> function in assembly:</p>
 
-        <pre>
+<pre>
 (gdb) break bypass_me
 Breakpoint 1 at 0x20e2
 (gdb) disassemble /m 0x20e2
