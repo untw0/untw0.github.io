@@ -13,14 +13,14 @@
 <div class="container">
 <h1>Bypassing String Verification and Reading the Flag</h1>
 
-<p>Hey everyone, I'm @untw0, and today's goal is to bypass string verification and read the flag. The <code>bypass_me</code> function is primarily responsible for this verification. Let's review the function and break down the process of crafting an exploit that bypasses this verification and gains access to the flag.</p>
+<p>Hey everyone, I'm <code>@untw0</code>, and today's goal is to bypass string verification and read the flag. The <code>bypass_me</code> function is primarily responsible for this verification. Let's review the function and break down the process of crafting an exploit that bypasses this verification and gains access to the flag.</p>
 
 <h2>Analysis of the <code>bypass_me</code> Function</h2>
 
 <p>Here is the <code>bypass_me</code> function in assembly:</p>
 
 <pre>
-(gdb) break bypass_me
+<code>(gdb) break bypass_me
 Breakpoint 1 at 0x20e2
 (gdb) disassemble /m 0x20e2
 Dump of assembler code for function bypass_me:
@@ -49,7 +49,7 @@ Dump of assembler code for function bypass_me:
 0x00005bb3a8b10135 &lt;+91&gt;:    je     0x5bb3a8b1013c &lt;bypass_me+98&gt;
 0x00005bb3a8b10137 &lt;+93&gt;:    call   0x5bb3a8b0f220 &lt;__stack_chk_fail@plt&gt;  &lt;===== Stack protection fails if the canary is incorrect
 0x00005bb3a8b1013c &lt;+98&gt;:    leave
-0x00005bb3a8b1013d &lt;+99&gt;:    ret
+0x00005bb3a8b1013d &lt;+99&gt;:    ret</code>
 </pre>
 
 <h2>Understanding the Function</h2>
@@ -57,8 +57,8 @@ Dump of assembler code for function bypass_me:
 <p>The <code>bypass_me</code> function checks if the provided string matches <code>0xdeadbeef</code>. If the string matches, the function returns 1, indicating successful verification. Otherwise, it returns 0. Additionally, if the stack canary value remains unchanged during function execution, the program will not call <code>__stack_chk_fail</code>, preventing stack protection failures and making exploitation easier.</p>
 
   <ul>
-      <li><strong>String Verification</strong>: The function uses <code>strncmp</code> to compare a provided string (in <code>%rdi</code>) with the string <code>0xdeadbeef</code>. The comparison is done over 4 bytes (<code>%edx</code> is 4).</li>
-      <li><strong>Stack Canary Check</strong>: Stack protection (canary) is handled through <code>%fs:0x28</code>. If the canary check fails, the function calls <code>__stack_chk_fail</code>, resulting in an immediate program termination and making it harder to exploit vulnerabilities.</li>
+      <li><code>String Verification</code>: The function uses <code>strncmp</code> to compare a provided string (in <code>%rdi</code>) with the string <code>0xdeadbeef</code>. The comparison is done over 4 bytes (<code>%edx</code> is 4).</li>
+      <li><code>Stack Canary Check</code>: Stack protection <code>canary</code> is handled through <code>%fs:0x28</code>. If the canary check fails, the function calls <code>__stack_chk_fail</code>, resulting in an immediate program termination and making it harder to exploit vulnerabilities.</li>
   </ul>
 
 <h2>Crafting the Payload</h2>
@@ -66,8 +66,8 @@ Dump of assembler code for function bypass_me:
 <p>To bypass the verification and read the flag, I needed to:</p>
 
 <ul>
-    <li><strong>Provide the Correct Value</strong>: The expected comparison value is <code>0xdeadbeef</code>. Thus, the payload should contain this value.</li>
-    <li><strong>Preserve the Stack Canary</strong>: The stack canary value is stored in <code>%fs:0x28</code> and must be preserved. Otherwise, the function will call <code>__stack_chk_fail</code>, resulting in an immediate program halt and complicating the exploitation process.</li>
+    <li><code>Provide the Correct Value</code>: The expected comparison value is <code>0xdeadbeef</code>. Thus, the payload should contain this value.</li>
+    <li><code>Preserve the Stack Canary</code>: The <code>stack canary</code> value is stored in <code>%fs:0x28</code> and must be preserved. Otherwise, the function will call <code>__stack_chk_fail</code>, resulting in an immediate program halt and complicating the exploitation process.</li>
 </ul>
 
 <h2>Crafting the Exploit Script</h2>
