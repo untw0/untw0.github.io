@@ -4,23 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Researcher Hacking Blog</title>
-    <link rel="stylesheet" type="text/css" href="./styles/style.css">
+    <link rel="stylesheet" href="./styles/posts.css">
 </head>
 <body>
     <nav>
         <ul>
-            <li><a href="#">home</a></li>
+            <li><a href="index.html">home</a></li>
             <li><a href="about.html">about</a></li>
-            <li><a href="posts.html">posts</a></li>
         </ul>
     </nav>
-    <section id="home">
-        <h2>Hello, welcome to my blog!</h2>
-        <p>> This blog highlights things I read in infosec and hacking articles.</p>
-        <p>> And I put what I learn into practice.</p>
-        <p>> So does that make me an “independent security researcher”? XD</p>
+    <section id="papers">
+        <h2>My Papers</h2>
+        <a href="./posts/pwn-challenge2.html" class="paper-bubble">
+            <h3>Buffer Overflow and Shellcode Injection</h3>
+            <p class="reading-time">Set 20, 2024 | by: @untw0 | Read: 5 min | Level: Beginner</p>
+            <p class="summary">Exploiting Buffer Overflow vulnerabilities to perform Shellcode Injection.</p>
+        </a>
+        <a href="./posts/pwn-challenge.html" class="paper-bubble">
+            <h3>Bypassing String Verification and Reading the Flag</h3>
+            <p class="reading-time">Set 07, 2024 | by: @untw0 | Read: 5 min | Level: Beginner</p>
+            <p class="summary">The goal is to bypass the string check and read the flag.</p>
+        </a>
     </section>
-
-    <script src="script.js"></script>
 </body>
 </html>
