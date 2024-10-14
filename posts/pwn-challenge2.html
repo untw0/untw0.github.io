@@ -61,7 +61,7 @@ line  CODE  JT   JF      K
 <p>I used the <code>seccomp-tools dump</code> command to examine the <code>Seccomp</code> filter rules in the orw binary. The filter checks the architecture and limits allowed system calls, such as <code>exit</code>, <code>open</code>, <code>read</code>, and <code>write</code>. Unauthorized calls result in an error <code>(ERRNO 38)</code>. This configuration helps protect the program against certain exploits, but it also indicates which calls can potentially be used in an attack.</p>
 
 <h3>GDB Disassemble</h3>
-<pre>
+<pre><code>
 (gdb) set disassembly-flavor intel
 
 (gdb) break main
@@ -84,7 +84,7 @@ Dump of assembler code for function main:
 0x0804857d <+53>:    call   0x8048370 <read@plt>     <==== Calls `read` to read user input (critical)
 0x08048585 <+61>:    mov    eax,0x804a060            <==== Moves buffer address to `eax`
 0x0804858a <+66>:    call   eax                      <==== Calls the shellcode function
-</pre>
+</pre></code>
 
 <h3>Explanation of Vulnerabilities:</h3>
 <ul>
