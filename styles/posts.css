@@ -1,91 +1,55 @@
 body {
-    font-family: "Lucida Consola", monospace;
+    background-color: black;
+    color: white;
+    font-family: monospace;
     margin: 0;
     padding: 0;
-    background-color: #0c0d10;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
-}
-
-nav {
-    width: 100%;
-    background-color: #0c0d10;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
     justify-content: center;
 }
 
-nav ul li {
-    margin: 0 15px;
+.container {
+    width: 80%;
+    max-width: 1200px;
+    padding: 20px;
 }
 
-nav ul li a {
-    display: block;
-    color: rgb(255, 255, 255);
-    padding: 1rem;
-    text-decoration: none;
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
 }
 
-nav ul li a:hover {
-    background-color: #555;
+h2, h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
 }
 
-section#papers {
-    max-width: 800px;
-    padding: 2rem;
-    background-color: #0c0d10;
-    border-radius: 10px;
-    text-align: center;
-    margin-top: 5rem;
+p, li {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
 }
 
-section#papers h2 {
-    margin-bottom: 2rem;
+pre {
+    font-size: 1rem;
+    overflow-x: auto;
+    background: #333;
+    padding: 10px;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
-.paper-bubble {
-    display: block;
-    background-color: #000000;
-    border-radius: 10px;
-    padding: 1rem;
-    margin: 1rem 0;
-    text-align: left;
-    color: #ffffff;
-    text-decoration: none;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+code {
+    font-size: 1rem;
+    color: #dcdcaa;
+    background: #333;
+    padding: 2px 4px;
+    border-radius: 3px;
 }
 
-.paper-bubble:hover {
-    background-color: #111111;
-    transform: scale(1.02);
-}
-
-.paper-bubble h3 {
-    margin-top: 0;
-}
-
-.paper-bubble .reading-time {
-    font-style: italic;
-    color: #ffffff;
-}
-
-.paper-bubble .summary {
-    margin-top: 0.5rem;
+ul, ol {
+    margin-left: 20px;
 }
 
