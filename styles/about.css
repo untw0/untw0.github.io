@@ -49,10 +49,8 @@ nav ul li a:hover {
 
 section#home {
     padding: 3rem;
-    background-color: #000000;
     border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: left; /* Alinha o texto à esquerda */
+        text-align: left;
     margin-top: 5rem;
 }
 
